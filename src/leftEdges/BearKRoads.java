@@ -70,8 +70,7 @@ public class BearKRoads {
 		// checking all roads connected to the left city of the top road (including top itself)
 		int roadPop = 0;
 		ArrayList<Road> leftRoads = adjL.get(topRoad.i);
-		ArrayList<Integer> leftRes = new ArrayList<>();
-		leftRes.add(0);
+		int res = 0;
 		for(Road leftRoad: leftRoads) {
 			if(roads.contains(leftRoad)) {
 				ArrayList<Road> copyRoads = cloneRoads(roads);
@@ -80,12 +79,12 @@ public class BearKRoads {
 				int prevJPop = pops[leftRoad.j];
 				roadPop = leftRoad.roadPop();
 				pops[leftRoad.i] = pops[leftRoad.j] = 0;
-				leftRes.add(roadPop + workMaxHappy(copyRoads, K - 1));
+				res = Math.max(res, roadPop + workMaxHappy(copyRoads, K - 1));
 				pops[leftRoad.i] = prevIPop;
 				pops[leftRoad.j] = prevJPop;
 			}
 		}
-		return Collections.max(leftRes);
+		return res;
 	}
 	
 	public int maxHappy(int[] x, int[] a, int[] b, int K) {
