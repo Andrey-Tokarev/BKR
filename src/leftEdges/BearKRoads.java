@@ -51,6 +51,16 @@ public class BearKRoads {
 		return cloneRoads;
 	}
 
+	private Road getMaxRoad(ArrayList<Road> roads) {
+		Road maxRoad = roads.get(0);
+		for(Road road: roads) {
+			if(road.roadPop() > maxRoad.roadPop()) {
+				maxRoad = road;
+			}
+		}
+		return maxRoad;
+	}
+	
 	private int workMaxHappy(ArrayList<Road> roads, int K) {
 		// firstly with top
 		if(roads.isEmpty() || K == 0) {
