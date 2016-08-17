@@ -66,28 +66,18 @@ public class BearKRoads {
 		if(roads.isEmpty() || K == 0) {
 			return 0;
 		}
-//		Collections.sort(roads, Collections.reverseOrder());
-//		Road topRoad = roads.get(0);
 		Road topRoad = getMaxRoad(roads);
-		ArrayList<Road> copyRoads = cloneRoads(roads);
-		copyRoads.remove(0);
-		int prevIPop = pops[topRoad.i];
-		int prevJPop = pops[topRoad.j];
-		int roadPop = topRoad.roadPop();
-		pops[topRoad.i] = pops[topRoad.j] = 0; 
-		int maxTop = roadPop + workMaxHappy(copyRoads, K - 1);
-		pops[topRoad.i] = prevIPop;
-		pops[topRoad.j] = prevJPop;
-		// now try firstly left roads of the top one
+		// checking all roads connected to the left city of the top road (including top itself)
+		int roadPop = 0;
 		ArrayList<Road> leftRoads = adjL.get(topRoad.i);
 		ArrayList<Integer> leftRes = new ArrayList<>();
 		leftRes.add(0);
 		for(Road leftRoad: leftRoads) {
-			if(leftRoad != topRoad && roads.contains(leftRoad)) {
-				copyRoads = cloneRoads(roads);
+			if(roads.contains(leftRoad)) {
+				ArrayList<Road> copyRoads = cloneRoads(roads);
 				copyRoads.remove(leftRoad);
-				prevIPop = pops[leftRoad.i];
-				prevJPop = pops[leftRoad.j];
+				int prevIPop = pops[leftRoad.i];
+				int prevJPop = pops[leftRoad.j];
 				roadPop = leftRoad.roadPop();
 				pops[leftRoad.i] = pops[leftRoad.j] = 0;
 				leftRes.add(roadPop + workMaxHappy(copyRoads, K - 1));
@@ -95,7 +85,7 @@ public class BearKRoads {
 				pops[leftRoad.j] = prevJPop;
 			}
 		}
-		return java.lang.Math.max(maxTop, Collections.max(leftRes));
+		return Collections.max(leftRes);
 	}
 	
 	public int maxHappy(int[] x, int[] a, int[] b, int K) {
