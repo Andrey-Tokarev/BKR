@@ -66,8 +66,9 @@ public class BearKRoads {
 		if(roads.isEmpty() || K == 0) {
 			return 0;
 		}
-		Collections.sort(roads, Collections.reverseOrder());
-		Road topRoad = roads.get(0);
+//		Collections.sort(roads, Collections.reverseOrder());
+//		Road topRoad = roads.get(0);
+		Road topRoad = getMaxRoad(roads);
 		ArrayList<Road> copyRoads = cloneRoads(roads);
 		copyRoads.remove(0);
 		int prevIPop = pops[topRoad.i];
