@@ -4,32 +4,48 @@ import java.util.ArrayList;
 
 public class BearKRoads {
 	int[] pops;  // cities populations
-	ArrayList<ArrayList<Road>> adjL;
-	ArrayList<Road> roads;
+	int[] c1; // city 1 of the roads
+	int[] c2; // city 2 of the roads
+	ArrayList<ArrayList<Integer>> adjL;
+//	ArrayList<Road> roads;
 	
-	public class Road {
-		int i;
-		int j;
+//	public class Road {
+//		int i;
+//		int j;
+//
+//		Road(int i, int j) {
+//			this.i = i;
+//			this.j = j;
+//		}
+//
+//		public int roadPop() { // road population (sum of the connected cities)
+//			return pops[i] + pops[j];
+//		}
+//
+//	}
+//	
+//	private Road getMaxRoad() {
+//		Road maxRoad = roads.get(0);
+//		for (Road road : roads) {
+//			if (road.roadPop() > maxRoad.roadPop()) {
+//				maxRoad = road;
+//			}
+//		}
+//		return maxRoad;
+//	}
+//
 
-		Road(int i, int j) {
-			this.i = i;
-			this.j = j;
-		}
-
-		public int roadPop() { // road population (sum of the connected cities)
-			return pops[i] + pops[j];
-		}
-
-	}
-	
-	private Road getMaxRoad() {
-		Road maxRoad = roads.get(0);
-		for (Road road : roads) {
-			if (road.roadPop() > maxRoad.roadPop()) {
-				maxRoad = road;
+	private int getMaxRoadInd() {
+		int maxRoadInd = 0;
+		int maxRoadPop = 0;
+		for(int i = 0; i < c1.length; ++i) {
+			int roadPop = pops[c1[i]] + pops[c2[i]]; 
+			if (roadPop > maxRoadPop) {
+				maxRoadInd = i;
+				maxRoadPop = roadPop;
 			}
 		}
-		return maxRoad;
+		return maxRoadInd;
 	}
 
 	private int workMaxHappy(int K) {
@@ -37,20 +53,20 @@ public class BearKRoads {
 		if (K == 0) {
 			return 0;
 		}
-		Road topRoad = getMaxRoad();
+		int topRoadInd = getMaxRoadInd();
 		// checking all roads connected to the left city of the top road
 		// (including top itself)
-		ArrayList<Road> leftRoads = adjL.get(topRoad.i);
+		ArrayList<Integer> leftRoads = adjL.get(c1[topRoadInd]);
 		int res = 0;
-		for (Road leftRoad : leftRoads) {
-			int roadPop = leftRoad.roadPop();
+		for (int leftRoad : leftRoads) {
+			int roadPop = pops[c1[leftRoad]] + pops[c2[leftRoad]] ;
 			if (roadPop != 0) {
-				int prevIPop = pops[leftRoad.i];
-				int prevJPop = pops[leftRoad.j];
-				pops[leftRoad.i] = pops[leftRoad.j] = 0;
+				int prevIPop = pops[c1[leftRoad]];
+				int prevJPop = pops[c2[leftRoad]];
+				pops[c1[leftRoad]] = pops[c2[leftRoad]] = 0;
 				res = Math.max(res, roadPop + workMaxHappy(K - 1));
-				pops[leftRoad.i] = prevIPop;
-				pops[leftRoad.j] = prevJPop;
+				pops[c1[leftRoad]] = prevIPop;
+				pops[c2[leftRoad]] = prevJPop;
 			}
 		}
 		return res;
@@ -58,17 +74,19 @@ public class BearKRoads {
 	
 	public int maxHappy(int[] x, int[] a, int[] b, int K) {
 		pops = x;
+		c1 = a;
+		c2 = b;
 		adjL = new ArrayList<>();
 		for(int i = 0; i < x.length; ++i) {
-			adjL.add(new ArrayList<Road>());
+			adjL.add(new ArrayList<Integer>());
 		}
-		roads = new ArrayList<Road>(); 
-		int M = a.length;
-		for(int l = 0; l < M; ++l) {
-			Road road = new Road(a[l], b[l]);
-			roads.add(road);
-			(adjL.get(a[l])).add(road);
-			(adjL.get(b[l])).add(road);
+////		roads = new ArrayList<Road>(); 
+//		int M = a.length;
+		for(int l = 0; l < c1.length; ++l) {
+//			Road road = new Road(a[l], b[l]);
+//			roads.add(road);
+			(adjL.get(c1[l])).add(c2[l]);
+			(adjL.get(c2[l])).add(c1[l]);
 		}
 		return workMaxHappy(K);
 	}
