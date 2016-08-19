@@ -7,33 +7,6 @@ public class BearKRoads {
 	int[] c1; // city 1 of the roads
 	int[] c2; // city 2 of the roads
 	ArrayList<ArrayList<Integer>> adjL;
-//	ArrayList<Road> roads;
-	
-//	public class Road {
-//		int i;
-//		int j;
-//
-//		Road(int i, int j) {
-//			this.i = i;
-//			this.j = j;
-//		}
-//
-//		public int roadPop() { // road population (sum of the connected cities)
-//			return pops[i] + pops[j];
-//		}
-//
-//	}
-//	
-//	private Road getMaxRoad() {
-//		Road maxRoad = roads.get(0);
-//		for (Road road : roads) {
-//			if (road.roadPop() > maxRoad.roadPop()) {
-//				maxRoad = road;
-//			}
-//		}
-//		return maxRoad;
-//	}
-//
 
 	private int getMaxRoadInd() {
 		int maxRoadInd = 0;
@@ -80,13 +53,9 @@ public class BearKRoads {
 		for(int i = 0; i < x.length; ++i) {
 			adjL.add(new ArrayList<Integer>());
 		}
-////		roads = new ArrayList<Road>(); 
-//		int M = a.length;
 		for(int l = 0; l < c1.length; ++l) {
-//			Road road = new Road(a[l], b[l]);
-//			roads.add(road);
-			(adjL.get(c1[l])).add(c2[l]);
-			(adjL.get(c2[l])).add(c1[l]);
+			(adjL.get(c1[l])).add(l);
+			(adjL.get(c2[l])).add(l);
 		}
 		return workMaxHappy(K);
 	}
@@ -95,10 +64,10 @@ public class BearKRoads {
 	public static void main(String[] args) {
 		long startTime = System.nanoTime();
 		BearKRoads bkr = new BearKRoads();
-		int[] x = {8,18,14,10,7,16,4,19,6,12,17,10,12,3,15,8,15,12};
-		int[] a = {0,15,1,5,7,3,17,4,15,3,13,14,4,7};
-		int[] b = {8,10,16,13,2,10,2,10,11,13,0,9,3,6};
-		int K = 7;
+		int[] x = {10, 50, 50, 10};
+		int[] a = {0, 1, 2};
+		int[] b = {1, 2, 3};
+		int K = 1;
 		System.out.println(bkr.maxHappy(x, a, b, K));
 		long endTime = System.nanoTime();
 		double estTime = (endTime-startTime) / 1000000000.0;
